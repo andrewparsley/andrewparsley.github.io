@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>lab three hopefully</title>
+        <script>
+            let count = 0;
+            function counting() {
+                count = count + 1;
+                alert(count);
+            }
+            function decounting() {
+                count = count - 1;
+                alert(count);
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Welcome to page number two!</h1>
+        <button onclick="counting()">Add one!</button>
+        <button onclick="decounting()">minus one!</button>
+        <nav>
+            <a href="./index.html">home</a>
+        </nav>
+    </body>
+</html>
