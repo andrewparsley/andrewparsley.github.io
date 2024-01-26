@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>numbers</title>
+        <script>
+            function multiplying() {
+                let num1 = parseFloat(document.querySelector('#first_value').value);
+                let num2 = parseFloat(document.querySelector('#second_value').value);
+                document.querySelector('#product').innerHTML = (num1 * num2);
+            }
+            document.addEventListener('DOMContentLoaded', () => { 
+                //document.querySelector('button').disabled = true;
+                document.querySelector('#first_value').onkeyup = multiplying;
+                document.querySelector('#second_value').onkeyup = multiplying;
+            })
+        </script>
+    </head>
+    <body>
+        <h1>on this page we find some numbers</h1>
+        <p>math is okay! let us multiply two numbers!</p>
+        <label>your favorite number: </label>
+        <input type="text" id="first_value" value="0"/>
+        <br>
+        <label>another number: </label>
+        <input type="text" id="second_value" value="0"/>
+
+        <br>
+        <button disabled="false">your total is:</button>
+        <span id="product">0</span>
+
+       
+        <nav>
+            <a href="./index.html">home</a>
+        </nav>
+    </body>
