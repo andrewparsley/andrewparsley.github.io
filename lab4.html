@@ -1,1 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>lab four the win</title>
+       
+    </head>
+    <body>
+        <script>
+            function writefunction() {
+                document.querySelector("#question").value += document.querySelector('#six').innerHTML
+            }
+            function clearfunction() {
+                document.querySelector("#question").value = ''
+            }
+        </script>
+        <h1>calculator</h1>
+        <label for="question">enter your Question here: </label>
+         <input type="text" id="question" value="0"/>
+         <br>
+       <br>
+       <button id="add">+</button>
+       <button id="minus">-</button>
+       <button id="multiply">*</button>
+       <br>
+       <br>
+       <button id="divide">/</button>
+       <button id="left_bracket">(</button>
+       <button id="right_bracket">)</button>
+       <br>
+       <br>
+       <button id="one">1</button>
+       <button id="two">2</button>
+       <button id="three">3</button>
+       <br>
+       <br>
+       
+      
+       <button id="four">4</button>
+       <button id="five">5</button>
+       
+       <button id="six" onclick="writefunction()">6</button>
+       <br>
+       <br>
+       <button id="seven">7</button>
+       <button id="eight">8</button>
+       <button id="nine">9</button>
+       <br>
+       <br>
+       <button id="zero">0</button>
+       <br>
+       <br>
+       <button id="delete">delete</button>
+       <button id="clear" onclick="clearfunction()">clear</button>
+       <button id="equals">=</button>
+    
 
+
+        <nav>
+            <a href="./index.html">home</a>
+        </nav>
+    </body>
+</html>
