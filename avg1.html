@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>average</title>
+        <script>
+            function average() {
+                let num1 = parseFloat(document.querySelector('#first_value').value);
+                let num2 = parseFloat(document.querySelector('#second_value').value);
+                document.querySelector('#product').innerHTML = ((num1 + num2) / 2);
+            }
+            document.addEventListener('DOMContentLoaded', () => { 
+                //document.querySelector('button').disabled = true;
+                document.querySelector('#first_value').onkeyup = average;
+                document.querySelector('#second_value').onkeyup = average;
+            })
+        </script>
+    </head>
+    <body>
+        <h1>lets find the average!</h1>
+        <p>on this page, we will calculate the average of two numbers!</p>
+        <label>first number: </label>
+        <input type="text" id="first_value" value="0"/>
+        <br>
+        <label>second number: </label>
+        <input type="text" id="second_value" value="0"/>
+
+        <br>
+        <button disabled="false">your total is:</button>
+        <span id="product">0</span>
+
+       
+        <nav>
+            <a href="./index.html">home</a>
+        </nav>
+    </body>
