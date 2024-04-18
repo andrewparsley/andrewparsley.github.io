@@ -41,7 +41,7 @@
             const choicebInput = document.querySelector('#choiceb');
             const navcodeInput = document.querySelector('#navcode'); // this is where i fooked it
             //const navcodeInput = curnavcode
-            const messageCategory = document.querySelector('#category'); //
+            //const messageCategory = document.querySelector('#category'); //
 
             const username = usernameInput.value;
             const message = messageInput.value;
@@ -49,12 +49,12 @@
             const choiceb = choicebInput.value;
             //const navcode = navcodeInput.value; //right here!!!!!!!!!!!
             const navcode = curnavcode; // i changed dis
-            const category = messageCategory.value; //
+            //const category = messageCategory.value; //
 
             if (username || message || choicea || choiceb || navcode) {
-                const timestamp = new Date();
+                //const timestamp = new Date();
                 
-                const data = { username, message, timestamp, category, choicea, choiceb, navcode};//
+                const data = { username, message, choicea, choiceb, navcode};//
 
                 try {
                     const response = await fetch(databaseUrl, {
@@ -73,11 +73,23 @@
                     choiceaInput.value = '';
                     choicebInput.value = '';
                     navcodeInput.value = '';
-                    messageCategory.value = 'general'; //try to set this as global varriable, see if it can read it
+                    //messageCategory.value = 'general'; //try to set this as global varriable, see if it can read it
                 } catch (error) {
                     console.error('Error sending message:', error);
                 }
             }
+            //stuff comma put here
+            curnavcode = "A";
+            //document.getElementById("dispnavcode").innerHTML = curnavcode
+            //displayAllMessages();
+            document.getElementById("testbook").innerHTML = "thank you so much for playing!"
+            document.getElementById("orgname").innerHTML = "I really hope you enjoyed it!"
+            document.getElementById("orgchoicea").innerHTML = "to play again, refresh the page, and you will go back to the start. maybe explore a new path this time, or check in on your old chapters to see if anyone has replied to them!"
+            document.getElementById("orgchoiceb").innerHTML = "come back soon!"
+            chapterfound = "truth"
+            displayAllMessages();
+
+
         }
 
         async function displayAllMessages() {
@@ -89,8 +101,8 @@
                 //let chapterfound = "lie";
                 for (const postId in data) {
                     const post = data[postId];
-                    const timestamp = post.timestamp;
-                    const time = new Date(timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
+                    //const timestamp = post.timestamp;
+                    //const time = new Date(timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
                     if (post.category == 'priority') {
                         dataContainer.innerHTML += `<p>Priority</p>`;
                     } //
@@ -108,14 +120,14 @@
 
                     if (post.navcode == 'BAAA') {
                         document.getElementById("testbook").innerHTML = "there was a dragon."
-                        document.getElementById("orgname").innerHTML = "written by cotten eyed joe"
+                        document.getElementById("orgname").innerHTML = "written by cotten eyed joe and friends"
                         document.getElementById("orgchoicea").innerHTML = "A: run"
                         document.getElementById("orgchoiceb").innerHTML = "B: fight"
                         
                         
                     }//
                     dataContainer.innerHTML += `
-                    <p>${time}</p>
+                    
                         <strong></strong> ${post.username}</p><br>
                         <strong></strong> ${post.message}</p><br>
                         <strong></strong> ${post.choicea}</p><br>
@@ -123,10 +135,12 @@
                         <strong></strong> ${post.navcode}</p><br>
                     `;
                 if (chapterfound == "lie") { // this line is broken on purpose to test
-                    document.getElementById("testbook").innerHTML = "it is time to write a new chapter! how exciting! refresh the page when you have sent it! "
-                    document.getElementById("orgchoicea").innerHTML = "remember to add the navcode down below. (the sequence of capital 'A's and 'B's)"
+                    document.getElementById("testbook").innerHTML = "it is time to write a new chapter! how exciting! "
+                    document.getElementById("orgchoicea").innerHTML = "the only limit is your immagination! you are free to switchs genres on any whim you like!"
                     document.getElementById("orgchoiceb").innerHTML = "the game automatically adds 'A:'' and 'B:'' to your choices, and 'written by' to your name."
                     document.getElementById("orgname").innerHTML = "if you dont want to write a new chapter, just refresh the page, and you can read more instead."
+                    //document.getElementById("message").innerHTML = "type here right now please!"
+                    // chapterfound equals truth? idk
                 }
                 } 
                 
@@ -135,24 +149,24 @@
                 databaseRef.addEventListener('put', async (event) => {
                     try {
                         const newData = JSON.parse(event.data);
-                        const messageData = newData.data;
-                        const time = new Date(messageData.timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
+                        //const messageData = newData.data;
+                        //const time = new Date(messageData.timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
                         if (messageData.category == 'priority') {
-                            dataContainer.innerHTML += `<p>Priority</p>`;
+                          dataContainer.innerHTML += `<p>Priority</p>`;
                         } //
                         if (messageData.navcode == 'AAAB') {
                             dataContainer.innerHTML += '<p>the navcode is AAAB, and thats neat</p>'
                         }//
-                        if (messageData.navcode == 'BAAA') {
-                            document.getElementById("testbook").innerHTML = messageData.message 
-                            document.getElementById("orgname").innerHTML = "written by " + messageData.username
-                            document.getElementById("orgchoicea").innerHTML = "A: " + messageData.choicea
-                            document.getElementById("orgchoiceb").innerHTML = "B: " + messageData.choiceb
+                        //if (messageData.navcode == 'BAAA') {
+                            //document.getElementById("testbook").innerHTML = messageData.message 
+                           // document.getElementById("orgname").innerHTML = "written by " + messageData.username
+                           //document.getElementById("orgchoicea").innerHTML = "A: " + messageData.choicea
+                            //document.getElementById("orgchoiceb").innerHTML = "B: " + messageData.choiceb
                             
-                        }//
+                       //}//
                         if (messageData.username || messageData.message) { // Check if data is valid, and if navcode is AAAB, experimental
                             dataContainer.innerHTML += `
-                            <p>${time}</p>
+                            
                             <strong></strong>${messageData.username}</p><br>
                             <strong></strong>${messageData.message}</p><br>
                             <strong></strong>${messageData.choicea}</p><br>
@@ -172,10 +186,10 @@
 </head>
 <body>
         <h1>Choose your own adventure game</h1>
-        <p id="testbook">original</p>
-        <p id="orgchoicea">originalchoicea</p>
-        <p id="orgchoiceb">originalchoiceb</p>
-        <p id="orgname">name</p>
+        <p id="testbook">me thinks there just might have been a dragon</p>
+        <p id="orgchoicea">A: run</p>
+        <p id="orgchoiceb">B: fight</p>
+        <p id="orgname">written by Bob Burger</p>
         <p id="dispnavcode">A</p>
        
         
@@ -185,17 +199,15 @@
         <button id="buttonC">Send Chapter!</button>
        
         <div>
-            <textarea id="username" placeholder="Enter your username" style="width: 300px; height: 100px;"></textarea>
+            
             <textarea id="message" placeholder="Enter your message" style="width: 300px; height: 100px;"></textarea>
             <textarea id="choicea" placeholder="Enter your choice a" style="width: 300px; height: 100px;"></textarea>
             <textarea id="choiceb" placeholder="Enter your choice b" style="width: 300px; height: 100px;"></textarea>
+            <textarea id="username" placeholder="Enter your username" style="width: 300px; height: 100px;"></textarea>
            
            
            
-            <select id="category">
-                <option value="general">General</option>
-                <option value="priority">Priority</option>
-            </select>
+           
             
             
             
