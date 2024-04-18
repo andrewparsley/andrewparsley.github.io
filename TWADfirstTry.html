@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <title>Real-time Chat Application</title>
+    <script type="module">
+        let curnavcode = 'A';
+        let chapterfound = "truth"
+       
+
+        
+        function addAToCurn() {
+            curnavcode += "A";
+            document.getElementById("dispnavcode").innerHTML = curnavcode
+            chapterfound = "lie";
+            displayAllMessages();
+            // trigger the display all messages function maybe perhaps STAR STAR STAR STAR STAR STAR STAR 
+        }
+        function addBToCurn() {
+            curnavcode += "B";
+            document.getElementById("dispnavcode").innerHTML = curnavcode
+            chapterfound = "lie";
+            displayAllMessages();
+        }
+        
+        const databaseUrl = 'https://cyoastory-85d2c-default-rtdb.firebaseio.com/chatMsg.json';
+        // Call the displayMessages function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('#buttonC').onclick = sendMessage;
+            //document.querySelector('#buttonC').onclick //clicking button c should reset curnavcode to "A".
+            document.querySelector('#firstbutton').onclick = addAToCurn;
+            document.querySelector('#secondbutton').onclick = addBToCurn;
+            displayAllMessages();
+        });
+        async function sendMessage() {
+            
+            const usernameInput = document.querySelector('#username');
+            const messageInput = document.querySelector('#message');
+            const choiceaInput = document.querySelector('#choicea');
+            const choicebInput = document.querySelector('#choiceb');
+            const navcodeInput = document.querySelector('#navcode'); // this is where i fooked it
+            //const navcodeInput = curnavcode
+            const messageCategory = document.querySelector('#category'); //
+
+            const username = usernameInput.value;
+            const message = messageInput.value;
+            const choicea = choiceaInput.value;
+            const choiceb = choicebInput.value;
+            //const navcode = navcodeInput.value; //right here!!!!!!!!!!!
+            const navcode = curnavcode; // i changed dis
+            const category = messageCategory.value; //
+
+            if (username || message || choicea || choiceb || navcode) {
+                const timestamp = new Date();
+                
+                const data = { username, message, timestamp, category, choicea, choiceb, navcode};//
+
+                try {
+                    const response = await fetch(databaseUrl, {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to send message');
+                    }
+                    messageInput.value = '';
+                    usernameInput.value = '';
+                    choiceaInput.value = '';
+                    choicebInput.value = '';
+                    navcodeInput.value = '';
+                    messageCategory.value = 'general'; //try to set this as global varriable, see if it can read it
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                }
+            }
+        }
+
+        async function displayAllMessages() {
+            try {
+                const response = await fetch(databaseUrl);
+                const data = await response.json();
+                const dataContainer = document.querySelector('#messages');
+                dataContainer.innerHTML = "<h2>Messages</h2>";
+                //let chapterfound = "lie";
+                for (const postId in data) {
+                    const post = data[postId];
+                    const timestamp = post.timestamp;
+                    const time = new Date(timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
+                    if (post.category == 'priority') {
+                        dataContainer.innerHTML += `<p>Priority</p>`;
+                    } //
+                    if (post.navcode == curnavcode) {
+                        
+                        document.getElementById("orgname").innerHTML = "written by " + post.username //
+                        document.getElementById("orgchoicea").innerHTML = "A: " + post.choicea //
+                        document.getElementById("orgchoiceb").innerHTML = "B: " + post.choiceb
+                        document.getElementById("testbook").innerHTML = post.message //
+                        chapterfound = "truth"; // this line has the problem
+               
+                    }//
+
+                    
+
+                    if (post.navcode == 'BAAA') {
+                        document.getElementById("testbook").innerHTML = "there was a dragon."
+                        document.getElementById("orgname").innerHTML = "written by cotten eyed joe"
+                        document.getElementById("orgchoicea").innerHTML = "A: run"
+                        document.getElementById("orgchoiceb").innerHTML = "B: fight"
+                        
+                        
+                    }//
+                    dataContainer.innerHTML += `
+                    <p>${time}</p>
+                        <strong></strong> ${post.username}</p><br>
+                        <strong></strong> ${post.message}</p><br>
+                        <strong></strong> ${post.choicea}</p><br>
+                        <strong></strong> ${post.choiceb}</p><br>
+                        <strong></strong> ${post.navcode}</p><br>
+                    `;
+                if (chapterfound == "lie") { // this line is broken on purpose to test
+                    document.getElementById("testbook").innerHTML = "it is time to write a new chapter! how exciting! refresh the page when you have sent it! "
+                    document.getElementById("orgchoicea").innerHTML = "remember to add the navcode down below. (the sequence of capital 'A's and 'B's)"
+                    document.getElementById("orgchoiceb").innerHTML = "the game automatically adds 'A:'' and 'B:'' to your choices, and 'written by' to your name."
+                    document.getElementById("orgname").innerHTML = "if you dont want to write a new chapter, just refresh the page, and you can read more instead."
+                }
+                } 
+                
+                // Subscribe to real-time updates
+                const databaseRef = new EventSource(databaseUrl);
+                databaseRef.addEventListener('put', async (event) => {
+                    try {
+                        const newData = JSON.parse(event.data);
+                        const messageData = newData.data;
+                        const time = new Date(messageData.timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
+                        if (messageData.category == 'priority') {
+                            dataContainer.innerHTML += `<p>Priority</p>`;
+                        } //
+                        if (messageData.navcode == 'AAAB') {
+                            dataContainer.innerHTML += '<p>the navcode is AAAB, and thats neat</p>'
+                        }//
+                        if (messageData.navcode == 'BAAA') {
+                            document.getElementById("testbook").innerHTML = messageData.message 
+                            document.getElementById("orgname").innerHTML = "written by " + messageData.username
+                            document.getElementById("orgchoicea").innerHTML = "A: " + messageData.choicea
+                            document.getElementById("orgchoiceb").innerHTML = "B: " + messageData.choiceb
+                            
+                        }//
+                        if (messageData.username || messageData.message) { // Check if data is valid, and if navcode is AAAB, experimental
+                            dataContainer.innerHTML += `
+                            <p>${time}</p>
+                            <strong></strong>${messageData.username}</p><br>
+                            <strong></strong>${messageData.message}</p><br>
+                            <strong></strong>${messageData.choicea}</p><br>
+                            <strong></strong>${messageData.choiceb}</p><br>
+                            <strong></strong>${messageData.navcode}</p><br>
+                            `;
+                        }
+                    } catch (error) {
+                        console.error('Error handling real-time update:', error);
+                    }
+                });
+            } catch (error) {
+                throw new Error('Error fetching data:', error);
+            }
+        }
+    </script>
+</head>
+<body>
+        <h1>Choose your own adventure game</h1>
+        <p id="testbook">original</p>
+        <p id="orgchoicea">originalchoicea</p>
+        <p id="orgchoiceb">originalchoiceb</p>
+        <p id="orgname">name</p>
+        <p id="dispnavcode">A</p>
+       
+        
+        
+        <button id="firstbutton">A</button>
+        <button id="secondbutton">B</button>
+        <button id="buttonC">Send Chapter!</button>
+       
+        <div>
+            <textarea id="username" placeholder="Enter your username" style="width: 300px; height: 100px;"></textarea>
+            <textarea id="message" placeholder="Enter your message" style="width: 300px; height: 100px;"></textarea>
+            <textarea id="choicea" placeholder="Enter your choice a" style="width: 300px; height: 100px;"></textarea>
+            <textarea id="choiceb" placeholder="Enter your choice b" style="width: 300px; height: 100px;"></textarea>
+           
+           
+           
+            <select id="category">
+                <option value="general">General</option>
+                <option value="priority">Priority</option>
+            </select>
+            
+            
+            
+        </div>
+       
+        <p id="messages"></p>
+</body>
+</html>
