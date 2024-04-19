@@ -65,11 +65,11 @@ function goToGamePage() {
                     if (post.category == 'priority') {
                         dataContainer.innerHTML += `<p>Priority</p>`;
                     } //
-                    dataContainer.innerHTML += `
+                    //dataContainer.innerHTML += `
                     
-                        <p><u><strong></strong> ${post.username}</u>:
-                            <strong></strong> ${post.message}</p><br>
-                    `;
+                       //<p><u><strong></strong> ${post.username}</u>:
+                         ///   <strong></strong> ${post.message}</p><br>
+                   // `;
                 } 
                 
                 // Subscribe to real-time updates
@@ -81,11 +81,11 @@ function goToGamePage() {
                         //const time = new Date(messageData.timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
                         
                         if (messageData.username || messageData.message) { // Check if data is valid
-                            dataContainer.innerHTML += `
+                            //dataContainer.innerHTML += `
                             
-                            <p><u><strong></strong>${messageData.username}</u>:
-                                    <strong></strong>${messageData.message}</p><br>
-                            `;
+                           // <p><u><strong></strong>${messageData.username}</u>:
+                              //      <strong></strong>${messageData.message}</p><br>
+                           // `;
                         }
                     } catch (error) {
                         console.error('Error handling real-time update:', error);
