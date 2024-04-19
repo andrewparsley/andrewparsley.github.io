@@ -2,27 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Reporting page</title>
+    <title>Real-time Chat Application</title>
     <script type="module">
+
+function goToGamePage() {
+    var GamePageUrl = 'https://andrewparsley.github.io/TWADfirstTry.html';
+    window.location.href = GamePageUrl;
+}
+
         const databaseUrl = 'https://cyoastory-85d2c-default-rtdb.firebaseio.com/chatMsg.json';
         // Call the displayMessages function when the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelector('button').onclick = sendMessage;
+            document.querySelector('#ReportButton').onclick = sendMessage;
+            document.querySelector('#BTG').onclick = goToGamePage;
             displayAllMessages();
         });
         async function sendMessage() {
             document.getElementById("words").innerHTML = "thank you for reporting A chapter! I will look at it when I have a chance."
-            const navcodeInput = document.querySelector('#navcode');
+            const usernameInput = document.querySelector('#username');
             const messageInput = document.querySelector('#message');
             const messageCategory = document.querySelector('#category'); //
 
-            const navcode = navcodeInput.value;
+            const username = usernameInput.value;
             const message = messageInput.value;
             const category = messageCategory.value; //
 
-            if (navcode || message) {
+            if (username || message) {
                 //const timestamp = new Date();
-                const data = { navcode, message, category};//
+                const data = { username, message, category};//
 
                 try {
                     const response = await fetch(databaseUrl, {
@@ -37,7 +44,7 @@
                         throw new Error('Failed to send message');
                     }
                     messageInput.value = '';
-                    navcodeInput.value = '';
+                    usernameInput.value = '';
                     messageCategory.value = 'Reason'; //
                 } catch (error) {
                     console.error('Error sending message:', error);
@@ -60,7 +67,7 @@
                     } //
                     dataContainer.innerHTML += `
                     
-                        <p><u><strong></strong> ${post.navcode}</u>:
+                        <p><u><strong></strong> ${post.username}</u>:
                             <strong></strong> ${post.message}</p><br>
                     `;
                 } 
@@ -73,10 +80,10 @@
                         const messageData = newData.data;
                         //const time = new Date(messageData.timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
                         
-                        if (messageData.navcode || messageData.message) { // Check if data is valid
+                        if (messageData.username || messageData.message) { // Check if data is valid
                             dataContainer.innerHTML += `
                             
-                            <p><u><strong></strong>${messageData.navcode}</u>:
+                            <p><u><strong></strong>${messageData.username}</u>:
                                     <strong></strong>${messageData.message}</p><br>
                             `;
                         }
@@ -91,10 +98,10 @@
     </script>
 </head>
 <body>
-        <h1>Reporting page</h1>
+        <h1>Real-time Chat Application</h1>
         <p id="words">enter the code (capital As and Bs) for the chapter you want to report, and select why you want to report it.</p>
         <div>
-            <input type="text" id="navcode" placeholder="Navcode here">
+            <input type="text" id="username" placeholder="Navcode here">
             <select id="category">
                 <option value="Reason">Reason:</option>
                 <option value="spell">Spelling mistake</option>
@@ -105,7 +112,8 @@
             <input type="text" id="message" placeholder="extra notes (optional)">
             
             
-            <button>Send</button>
+            <button id="ReportButton">Send</button>
+            <button id="BTG">Back to Game</button>
         </div>
         <p id="messages"></p>
 </body>
