@@ -136,14 +136,14 @@
                         
                         
                     }//
-                    dataContainer.innerHTML += `
+                    //dataContainer.innerHTML += `
                     
-                        <strong></strong> ${post.username}</p><br>
-                        <strong></strong> ${post.message}</p><br>
-                        <strong></strong> ${post.choicea}</p><br>
-                        <strong></strong> ${post.choiceb}</p><br>
-                        <strong></strong> ${post.navcode}</p><br>
-                    `;
+                        //<strong></strong> ${post.username}</p><br>
+                      //  <strong></strong> ${post.message}</p><br>
+                       // <strong></strong> ${post.choicea}</p><br>
+                       // <strong></strong> ${post.choiceb}</p><br>
+                       // <strong></strong> ${post.navcode}</p><br>
+                   // `;
                 if (chapterfound == "lie") { // this line is broken on purpose to test
                     document.getElementById("testbook").innerHTML = "it is time to write a new chapter! how exciting! "
                     document.getElementById("orgchoicea").innerHTML = "the only limit is your immagination! you are free to switchs genres on any whim you like!"
@@ -175,14 +175,14 @@
                             
                        //}//
                         if (messageData.username || messageData.message) { // Check if data is valid, and if navcode is AAAB, experimental
-                            dataContainer.innerHTML += `
+                           // dataContainer.innerHTML += `
                             
-                            <strong></strong>${messageData.username}</p><br>
-                            <strong></strong>${messageData.message}</p><br>
-                            <strong></strong>${messageData.choicea}</p><br>
-                            <strong></strong>${messageData.choiceb}</p><br>
-                            <strong></strong>${messageData.navcode}</p><br>
-                            `;
+                           // <strong></strong>${messageData.username}</p><br>
+                           // <strong></strong>${messageData.message}</p><br>
+                           // <strong></strong>${messageData.choicea}</p><br>
+                           // <strong></strong>${messageData.choiceb}</p><br>
+                           // <strong></strong>${messageData.navcode}</p><br>
+                           // `;
                         }
                     } catch (error) {
                         console.error('Error handling real-time update:', error);
