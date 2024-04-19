@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-time Chat Application</title>
+    <script type="module">
+        const databaseUrl = 'https://cyoastory-85d2c-default-rtdb.firebaseio.com/chatMsg.json';
+        // Call the displayMessages function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('button').onclick = sendMessage;
+            displayAllMessages();
+        });
+        async function sendMessage() {
+            document.getElementById("words").innerHTML = "thank you for reporting A chapter! I will look at it when I have a chance."
+            const navcodeInput = document.querySelector('#navcode');
+            const messageInput = document.querySelector('#message');
+            const messageCategory = document.querySelector('#category'); //
+
+            const navcode = navcodeInput.value;
+            const message = messageInput.value;
+            const category = messageCategory.value; //
+
+            if (navcode || message) {
+                //const timestamp = new Date();
+                const data = { navcode, message, category};//
+
+                try {
+                    const response = await fetch(databaseUrl, {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to send message');
+                    }
+                    messageInput.value = '';
+                    navcodeInput.value = '';
+                    messageCategory.value = 'Reason'; //
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                }
+            }
+        }
+
+        async function displayAllMessages() {
+            try {
+                const response = await fetch(databaseUrl);
+                const data = await response.json();
+                const dataContainer = document.querySelector('#messages');
+                dataContainer.innerHTML = "<h2>Messages</h2>";
+                for (const postId in data) {
+                    const post = data[postId];
+                    //const timestamp = post.timestamp;
+                    //const time = new Date(timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
+                    if (post.category == 'priority') {
+                        dataContainer.innerHTML += `<p>Priority</p>`;
+                    } //
+                    dataContainer.innerHTML += `
+                    
+                        <p><u><strong></strong> ${post.navcode}</u>:
+                            <strong></strong> ${post.message}</p><br>
+                    `;
+                } 
+                
+                // Subscribe to real-time updates
+                const databaseRef = new EventSource(databaseUrl);
+                databaseRef.addEventListener('put', async (event) => {
+                    try {
+                        const newData = JSON.parse(event.data);
+                        const messageData = newData.data;
+                        //const time = new Date(messageData.timestamp).toLocaleString("en-US", {timeZone: "America/Vancouver"});
+                        
+                        if (messageData.navcode || messageData.message) { // Check if data is valid
+                            dataContainer.innerHTML += `
+                            
+                            <p><u><strong></strong>${messageData.navcode}</u>:
+                                    <strong></strong>${messageData.message}</p><br>
+                            `;
+                        }
+                    } catch (error) {
+                        console.error('Error handling real-time update:', error);
+                    }
+                });
+            } catch (error) {
+                throw new Error('Error fetching data:', error);
+            }
+        }
+    </script>
+</head>
+<body>
+        <h1>Real-time Chat Application</h1>
+        <p id="words">enter the code (capital As and Bs) for the chapter you want to report, and select why you want to report it.</p>
+        <div>
+            <input type="text" id="navcode" placeholder="Navcode here">
+            <select id="category">
+                <option value="Reason">Reason:</option>
+                <option value="spell">Spelling mistake</option>
+                <option value="grammer">Grammer mistake</option>
+                <option value="bad">Inappropriate / offensive</option>
+                <option value="real">Real life personal details, doxxing</option>
+            </select>
+            <input type="text" id="message" placeholder="extra notes (optional)">
+            
+            
+            <button>Send</button>
+        </div>
+        <p id="messages"></p>
+</body>
+</html>
