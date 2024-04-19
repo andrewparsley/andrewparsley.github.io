@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="UTF-8">
-    <title>Real-time Chat Application</title>
+    <title>time to CYOA!</title>
     <script type="module">
         let curnavcode = 'A';
         let chapterfound = "truth"
@@ -23,6 +23,14 @@
             chapterfound = "lie";
             displayAllMessages();
         }
+        function goToNewPage() {
+            var newPageUrl = 'https://andrewparsley.github.io/TWADintro.html'; // Replace this URL with your desired page URL
+            window.location.href = newPageUrl;
+        }
+        function goToReportPage() {
+            var ReportPageUrl = 'https://andrewparsley.github.io/ReportPage.html';
+            window.location.href = ReportPageUrl;
+        }
         
         const databaseUrl = 'https://cyoastory-85d2c-default-rtdb.firebaseio.com/chatMsg.json';
         // Call the displayMessages function when the DOM is fully loaded
@@ -31,6 +39,8 @@
             //document.querySelector('#buttonC').onclick //clicking button c should reset curnavcode to "A".
             document.querySelector('#firstbutton').onclick = addAToCurn;
             document.querySelector('#secondbutton').onclick = addBToCurn;
+            document.querySelector('#ButtonD').onclick = goToNewPage;
+            document.querySelector('#ButtonE').onclick = goToReportPage;
             displayAllMessages();
         });
         async function sendMessage() {
@@ -185,8 +195,8 @@
     </script>
 </head>
 <body>
-        <h1>Choose your own adventure gamess D</h1>
-        <p id="testbook">there was a dragon</p>
+        <h1>Choose your own adventure game</h1>
+        <p id="testbook">me thinks there just might have been two dragons</p>
         <p id="orgchoicea">A: run</p>
         <p id="orgchoiceb">B: fight</p>
         <p id="orgname">written by Bob Burger</p>
@@ -197,6 +207,8 @@
         <button id="firstbutton">A</button>
         <button id="secondbutton">B</button>
         <button id="buttonC">Send Chapter!</button>
+        <button id="ButtonD">ButtonD</button>
+        <button id="ButtonE">ButtonE</button>
        
         <div>
             
@@ -214,6 +226,5 @@
         </div>
        
         <p id="messages"></p>
-    
 </body>
 </html>
